@@ -53,14 +53,15 @@ def validate_data(values):
     return True
 
 
-def update_sales_worksheet(data):
+def update_worksheet(sheet, data):
     """
-    Update Sales worksheet in Google sheets:
-    Add new row with user input Sales data
+    function to add the new surplus data to
+    a new row in the surplus worksheet
     """
-    print("Updating sales worksheet...\n")
-    sales_worksheet = SHEET.worksheet("sales")
-    sales_worksheet.append_row(data)
+    print(f"Updating {sheet} worksheet...")
+    print("\n")
+    update_worksheet = SHEET.worksheet(sheet)
+    update_worksheet.append_row(data)
     print("Worksheet is updated.\n")
 
 
@@ -82,8 +83,9 @@ def calculate_surplus_data(sales_row):
 def main():
     data = get_sales_data()
     sales_data = [int(num) for num in data]
-    update_sales_worksheet(sales_data)
+    update_worksheet("sales", sales_data)
     new_surplus_data = calculate_surplus_data(sales_data)
+    update_worksheet("surplus", new_surplus_data)
 
 
 print("Welcome to Love Sandwiches Data automation! \n")
