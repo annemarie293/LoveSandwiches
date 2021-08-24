@@ -97,12 +97,33 @@ def get_last_5_entries_sales():
 
 
 def calculate_stock_rec(data):
+    """
+    method to calculate stock recommendation 
+    by finding average of last 5 days sales + 10%
+    """
     stock_rec = []
     for row in data: 
         total = sum(row)/5
-        total = math.ceil(total*1.1))
+        total = math.ceil(total*1.1)
         stock_rec.append(total)
     return stock_rec
+
+
+def return_sandwich_list():
+    """
+    method to return the names of sandwich in a list of strings
+    """
+    list = SHEET.worksheet("sales").get_all_values()
+    sandwich_list = list[0]
+    return sandwich_list
+
+def create_stock_advice_dict(keys, values):
+    """
+    creates dictionary from 2 lists:
+    sandwich name: new stock recommendation
+    """
+    stock_dict = dict(zip(keys, values))  
+    print(f"For tomorrow, please make the following qtys of each sandwich: {stock_dict}") 
 
 def main():
     data = get_sales_data()
@@ -110,12 +131,16 @@ def main():
     update_worksheet("sales", sales_data)
     new_surplus_data = calculate_surplus_data(sales_data)
     update_worksheet("surplus", new_surplus_data)
-    sales_columns =get_last_5_entries_sales()
-    stock_calculation =calculate_stock_rec(sales_columns)
+    sales_columns = get_last_5_entries_sales()
+    stock_calculation = calculate_stock_rec(sales_columns)
     update_worksheet("stock", stock_calculation)
-
+    sandwich_list_keys = return_sandwich_list()
+    create_stock_advice_dict(sandwich_list_keys, stock_calculation)
+    
 
 print("Welcome to Love Sandwiches Data automation! \n")
 main()
+
+
 
 
